@@ -1,14 +1,27 @@
-const express = require('express');
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const contactsRouter = require("./routes/contacts.js");
+dotenv.config();
+
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
-//basic express server to get my girlfriends name
+// JSON parser
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Haley Kuester');
-});
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-//Start the Server
+// Routes
+app.use("/contacts", contactsRouter);
+
+// Test root route
+app.get("/", (req, res) => res.send("Server and MongoDB working!"));
+
 app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+  console.log(`Server running on ${port}`);
 });

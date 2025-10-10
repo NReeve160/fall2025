@@ -1,0 +1,8 @@
+### Test server connection
+GET http://localhost:8080/
+
+### Get all contacts
+GET http://localhost:8080/contacts
+
+### Get one contact by ID
+GET http://localhost:8080/contacts/68e951ec683ff70d79e54aca
