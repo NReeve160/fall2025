@@ -5,9 +5,7 @@ const doc = {
   info: {
     title: 'My API',
     description: 'API documentation for my Express project',
-  },
-  host: process.env.SWAGGER_HOST || 'localhost:8080',
-  schemes: ['http'],
+  },  schemes: ['http'],
 };
 
 const outputFile = './swagger-output.json'; // generated file
