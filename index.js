@@ -26,7 +26,7 @@ app.use("/contacts", contactsRouter);
 app.get("/", (req, res) => res.send("Server and MongoDB working!"));
 
 // Swagger UI setup
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
