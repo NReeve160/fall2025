@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Temple API",
-    "description": "API documentation for Temple project",
+    "title": "Contacts API",
+    "description": "API for Contacts",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
     "http",
