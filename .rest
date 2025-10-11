@@ -18,8 +18,8 @@ Content-Type: application/json
   "phone": "555-555-5555"
 }
 
-### Update a new contact
-PUT http://localhost:8080/contacts/68ea0419efc8d1bd0bc7fa71
+### Update a contact
+PUT http://localhost:8080/contacts/68ea058e6db32f5577269883
 Content-Type: application/json
 
 {
@@ -29,4 +29,4 @@ Content-Type: application/json
   "phone": "555-123-4567"
 }
 ### Delete a contact
-DELETE http://localhost:8080/contacts/68ea0419efc8d1bd0bc7fa71
+DELETE http://localhost:8080/contacts/68ea058e6db32f5577269883

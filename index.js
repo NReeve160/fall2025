@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 const contactsRouter = require("./routes/contacts.js");
 dotenv.config();
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger-output.json');
+
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -21,6 +24,9 @@ app.use("/contacts", contactsRouter);
 
 // Test root route
 app.get("/", (req, res) => res.send("Server and MongoDB working!"));
+
+// Swagger UI setup
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
