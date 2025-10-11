@@ -2,16 +2,20 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'Temple API',
-    description: 'API documentation for Temple project',
+    title: 'Contacts API',
+    description: 'API for managing contacts',
   },
-  host: process.env.SWAGGER_HOST || 'fall2025.onrender.com', // <- dynamic host
-  schemes: ['https'], // Render uses https
+  host: 'fall2025.onrender.com',
+  schemes: ['https'],
+  definitions: {
+    Contact: {
+      firstName: "any",
+      lastName: "any",
+      email: "any",
+      favoriteColor: "any",   // <-- include here
+      birthday: "any",
+    },
+  },
 };
 
-const outputFile = './swagger-output.json';
-const endpointsFiles = ['./index.js'];
-
-swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
-  console.log('Swagger documentation generated!');
-});
+swaggerAutogen('./swagger-output.json', ['./index.js'], doc);

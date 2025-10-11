@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Temple API",
-    "description": "API documentation for Temple project",
+    "title": "Contacts API",
+    "description": "API for managing contacts",
     "version": "1.0.0"
   },
   "host": "fall2025.onrender.com",
@@ -163,6 +163,33 @@
           "500": {
             "description": "Internal Server Error"
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "example": "any"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "any"
+        },
+        "email": {
+          "type": "string",
+          "example": "any"
+        },
+        "favoriteColor": {
+          "type": "string",
+          "example": "any"
+        },
+        "birthday": {
+          "type": "string",
+          "example": "any"
         }
       }
     }
