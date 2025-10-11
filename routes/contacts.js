@@ -74,11 +74,11 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const { firstName, lastName, email, phone } = req.body;
+    const { firstName, lastName, email, favoriteColor, phone } = req.body;
 
     if (!firstName || !lastName || !email || !phone) {
       return res.status(400).json({
-        message: "All fields (firstName, lastName, email, phone) are required."
+        message: "All fields (firstName, lastName, email, favoriteColor, phone) are required."
       });
     }
 
