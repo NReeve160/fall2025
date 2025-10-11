@@ -1,14 +1,23 @@
 // swagger.js
 const swaggerAutogen = require('swagger-autogen')();
 
+// Use environment variable for host, fallback to localhost
 const doc = {
   info: {
-    title: 'My API',
-    description: 'API documentation for my Express project',
-  },  schemes: ['http'],
+    title: 'Temple API',
+    description: 'API documentation for Temple project',
+    version: '1.0.0',
+  },
+  host: process.env.SWAGGER_HOST || 'localhost:8080', // <-- change here
+  schemes: ['http', 'https'], // supports both
+  basePath: '/', // optional, if your routes are prefixed add here
+  // optional global security, definitions, etc.
 };
 
-const outputFile = './swagger-output.json'; // generated file
-const endpointsFiles = ['./index.js']; // your main server file with routes
+// Define the endpoints files to scan
+const outputFile = './swagger-output.json';
+const endpointsFiles = ['./index.js']; // add other route files if needed
 
-swaggerAutogen(outputFile, endpointsFiles, doc);
+swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
+  console.log('Swagger documentation generated successfully!');
+});
