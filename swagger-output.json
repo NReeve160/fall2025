@@ -51,6 +51,9 @@
                 "email": {
                   "example": "any"
                 },
+                "favoriteColor": {
+                  "example": "any"
+                },
                 "phone": {
                   "example": "any"
                 }

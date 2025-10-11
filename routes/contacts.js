@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
 // POST new contact
 router.post("/", async (req, res) => {
   try {
-    const { firstName, lastName, email, phone } = req.body;
+    const { firstName, lastName, email, favoriteColor, phone } = req.body;
 
     // Validation
     if (!firstName || !lastName || !email || !phone) {
@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
     // Insert the contact into MongoDB
     const result = await mongoose.connection.db
       .collection("contacts")
-      .insertOne({ firstName, lastName, email, phone });
+      .insertOne({ firstName, lastName, email, favoriteColor, phone });
 
     // Return new contact _id
     res.status(201).json({
