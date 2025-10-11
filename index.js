@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const contactsRouter = require("./routes/contacts.js");
@@ -9,6 +10,11 @@ const swaggerFile = require('./swagger-output.json');
 
 const app = express();
 const port = process.env.PORT || 8080;
+
+// Cors
+app.use(cors({
+  origin: 'https://cse341-contacts-frontend.netlify.app'
+}));
 
 // JSON parser
 app.use(express.json());
