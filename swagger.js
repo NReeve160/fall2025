@@ -6,7 +6,7 @@ const doc = {
     title: 'My API',
     description: 'API documentation for my Express project',
   },
-  host: 'localhost:8080', // change if your server runs on a different port
+  host: process.env.SWAGGER_HOST || 'localhost:8080',
   schemes: ['http'],
 };
 
