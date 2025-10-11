@@ -1,22 +1,17 @@
-// swagger.js
 const swaggerAutogen = require('swagger-autogen')();
 
-// Use environment variable for host, fallback to localhost
 const doc = {
   info: {
-    title: 'Contacts API',
-    description: 'API for Contacts',
-    version: '1.0.0',
+    title: 'Temple API',
+    description: 'API documentation for Temple project',
   },
-  schemes: ['http', 'https'], // supports both
-  basePath: '/', // optional, if your routes are prefixed add here
-  // optional global security, definitions, etc.
+  host: process.env.SWAGGER_HOST || 'localhost:8080', // <- dynamic host
+  schemes: ['https'], // Render uses https
 };
 
-// Define the endpoints files to scan
 const outputFile = './swagger-output.json';
-const endpointsFiles = ['./index.js']; // add other route files if needed
+const endpointsFiles = ['./index.js'];
 
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
-  console.log('Swagger documentation generated successfully!');
+  console.log('Swagger documentation generated!');
 });
