@@ -5,7 +5,7 @@ const doc = {
     title: 'Temple API',
     description: 'API documentation for Temple project',
   },
-  host: process.env.SWAGGER_HOST || 'localhost:8080', // <- dynamic host
+  host: process.env.SWAGGER_HOST || 'fall2025.onrender.com', // <- dynamic host
   schemes: ['https'], // Render uses https
 };
 

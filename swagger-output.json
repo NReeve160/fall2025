@@ -1,14 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Contacts API",
-    "description": "API for Contacts",
+    "title": "Temple API",
+    "description": "API documentation for Temple project",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "fall2025.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
     "https"
   ],
   "paths": {
