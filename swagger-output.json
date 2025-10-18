@@ -10,22 +10,167 @@
   "schemes": [
     "http"
   ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
     "/adventurers/": {
       "get": {
         "description": "",
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         }
       },
       "post": {
         "description": "",
-        "responses": {
-          "default": {
-            "description": ""
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Adventurer info to create",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "example": {
+                          "type": "string",
+                          "example": "Lirael"
+                        }
+                      }
+                    },
+                    "class": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "example": {
+                          "type": "string",
+                          "example": "Rogue"
+                        }
+                      }
+                    },
+                    "level": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "integer"
+                        },
+                        "example": {
+                          "type": "number",
+                          "example": 5
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/adventurers/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated adventurer info",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Adventurer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Adventurer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Lirael"
+        },
+        "class": {
+          "type": "string",
+          "example": "Rogue"
+        },
+        "level": {
+          "type": "number",
+          "example": 5
         }
       }
     }

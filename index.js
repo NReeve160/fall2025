@@ -1,26 +1,24 @@
+// index.js
 const express = require('express');
-const cors = require('cors');
-const connectDB = require('./db/dbController');
-require('dotenv').config();
-
-const app = express();
-const port = process.env.PORT || 8080;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Connect to MongoDB
-connectDB();
-
-// Swagger
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output.json');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+const adventurersRoutes = require('./routes/adventurers');
 
-// Routes
-const adventurerRoutes = require('./routes/adventurers');
-app.use('/adventurers', adventurerRoutes);
+const app = express();
+const PORT = 8080;
 
-// Start server
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
+app.use(express.json());
+app.use('/adventurers', adventurersRoutes);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
+  console.log(`📘 Swagger docs at http://localhost:${PORT}/docs`);
+});
