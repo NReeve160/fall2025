@@ -9,8 +9,8 @@ const doc = {
   },
   host: "localhost:8080",
   schemes: ["http"],
-  consumes: ["application/json"],   // 👈 Add this line
-  produces: ["application/json"],   // 👈 And this line
+  consumes: ["application/json"],   
+  produces: ["application/json"],   
   definitions: {
     Adventurer: {
       name: "Lirael",
