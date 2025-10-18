@@ -2,20 +2,15 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'Contacts API',
-    description: 'API for managing contacts',
+    title: 'Adventurer’s Guild API',
+    description: 'API for managing D&D adventurers',
+    version: '1.0.0',
   },
-  host: 'fall2025.onrender.com',
-  schemes: ['https'],
-  definitions: {
-    Contact: {
-      firstName: "any",
-      lastName: "any",
-      email: "any",
-      favoriteColor: "any",   // <-- include here
-      birthday: "any",
-    },
-  },
+  host: 'localhost:8080',
+  schemes: ['http'],
 };
 
-swaggerAutogen('./swagger-output.json', ['./index.js'], doc);
+const outputFile = './swagger-output.json';
+const endpointsFiles = ['./index.js']; // You can add other route files here if needed
+
+swaggerAutogen(outputFile, endpointsFiles, doc);

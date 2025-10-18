@@ -1,39 +1,26 @@
-const express = require("express");
+const express = require('express');
 const cors = require('cors');
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const contactsRouter = require("./routes/contacts.js");
-dotenv.config();
-
-const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./swagger-output.json');
+const connectDB = require('./db/dbController');
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 8080;
 
-// Cors
-app.use(cors({
-  origin: 'https://cse341-contacts-frontend.netlify.app'
-}));
-
-// JSON parser
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+// Connect to MongoDB
+connectDB();
 
-// Routes
-app.use("/contacts", contactsRouter);
-
-// Test root route
-app.get("/", (req, res) => res.send("Server and MongoDB working!"));
-
-// Swagger UI setup
+// Swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger-output.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.listen(port, () => {
-  console.log(`Server running on ${port}`);
-});
+// Routes
+const adventurerRoutes = require('./routes/adventurers');
+app.use('/adventurers', adventurerRoutes);
+
+// Start server
+app.listen(port, () => console.log(`Server running on port ${port}`));

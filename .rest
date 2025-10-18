@@ -1,32 +1,20 @@
-### Test server connection
-GET http://localhost:8080/
+### Get all adventurers
+GET http://localhost:8080/adventurers
+Content-Type: application/json
 
-### Get all contacts
-GET http://localhost:8080/contacts
+### Get a single adventurer by ID
+GET http://localhost:8080/adventurers/PUT_AN_ID_HERE
+Content-Type: application/json
 
-### Get one contact by ID
-GET http://localhost:8080/contacts/68ea0293c20001085fd52d1d
-
-### Create a new contact
-POST http://localhost:8080/contacts
+### Create a new adventurer
+POST http://localhost:8080/adventurers
 Content-Type: application/json
 
 {
-  "firstName": "New1",
-  "lastName": "NewL1",
-  "email": "New1@example.com",
-  "phone": "555-555-5555"
+  "name": "Elaran the Wise",
+  "race": "Elf",
+  "class": "Wizard",
+  "level": 10,
+  "background": "Sage",
+  "alignment": "Neutral Good"
 }
-
-### Update a contact
-PUT http://localhost:8080/contacts/68ea058e6db32f5577269883
-Content-Type: application/json
-
-{
-  "firstName": "Nathan",
-  "lastName": "Reeve",
-  "email": "nathan@example.com",
-  "phone": "555-123-4567"
-}
-### Delete a contact
-DELETE http://localhost:8080/contacts/68ea058e6db32f5577269883
