@@ -35,57 +35,7 @@
             "description": "Adventurer info to create",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "object"
-                },
-                "properties": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "example": "string"
-                        },
-                        "example": {
-                          "type": "string",
-                          "example": "Lirael"
-                        }
-                      }
-                    },
-                    "class": {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "example": "string"
-                        },
-                        "example": {
-                          "type": "string",
-                          "example": "Rogue"
-                        }
-                      }
-                    },
-                    "level": {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "example": "integer"
-                        },
-                        "example": {
-                          "type": "number",
-                          "example": 5
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+              "$ref": "#/definitions/Adventurer"
             }
           }
         ],
@@ -160,17 +110,105 @@
     "Adventurer": {
       "type": "object",
       "properties": {
-        "name": {
+        "type": {
           "type": "string",
-          "example": "Lirael"
+          "example": "object"
         },
-        "class": {
-          "type": "string",
-          "example": "Rogue"
-        },
-        "level": {
-          "type": "number",
-          "example": 5
+        "properties": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "Lirael"
+                }
+              }
+            },
+            "class": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "Rogue"
+                }
+              }
+            },
+            "level": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "example": {
+                  "type": "number",
+                  "example": 5
+                }
+              }
+            },
+            "race": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "Elf"
+                }
+              }
+            },
+            "background": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "Outlander"
+                }
+              }
+            },
+            "alignment": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "Chaotic Good"
+                }
+              }
+            },
+            "hitPoints": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "example": {
+                  "type": "number",
+                  "example": 42
+                }
+              }
+            }
+          }
         }
       }
     }

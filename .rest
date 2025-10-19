@@ -1,0 +1,38 @@
+### 🧙 GET all adventurers
+GET http://localhost:8080/adventurers
+Accept: application/json
+
+
+### ⚔️ POST a new adventurer
+POST http://localhost:8080/adventurers
+Content-Type: application/json
+
+{
+  "name": "Billy Bong",
+  "class": "Warlock",
+  "level": 7,
+  "race": "Half-Orc",
+  "background": "Outlander",
+  "alignment": "Neutral Good",
+  "hitPoints": 100
+}
+
+### 🧙 GET all adventurers online
+GET https://fall2025.onrender.com/adventurers
+Accept: application/json
+
+
+### ⚔️ POST a new adventurer online
+POST https://fall2025.onrender.com/adventurers
+Content-Type: application/json
+
+{
+  "name": "Billy Bong",
+  "class": "Warlock",
+  "level": 7,
+  "race": "Half-Orc",
+  "background": "Outlander",
+  "alignment": "Neutral Good",
+  "hitPoints": 100
+}
+

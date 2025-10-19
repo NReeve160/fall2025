@@ -11,13 +11,20 @@ const doc = {
   schemes: ["http"],
   consumes: ["application/json"],   
   produces: ["application/json"],   
-  definitions: {
-    Adventurer: {
-      name: "Lirael",
-      class: "Rogue",
-      level: 5,
-    },
-  },
+definitions: {
+  Adventurer: {
+    type: "object",
+    properties: {
+      name: { type: "string", example: "Lirael" },
+      class: { type: "string", example: "Rogue" },
+      level: { type: "integer", example: 5 },
+      race: { type: "string", example: "Elf" },
+      background: { type: "string", example: "Outlander" },
+      alignment: { type: "string", example: "Chaotic Good" },
+      hitPoints: { type: "integer", example: 42 }
+    }
+  }
+}
 };
 
 const outputFile = path.join(__dirname, 'swagger-output.json');
