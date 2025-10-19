@@ -8,11 +8,11 @@ POST http://localhost:8080/adventurers
 Content-Type: application/json
 
 {
-  "name": "Billy Bong",
-  "class": "Warlock",
+  "name": "Ezra",
+  "class": "Rogue",
   "level": 7,
-  "race": "Half-Orc",
-  "background": "Outlander",
+  "race": "Kenku",
+  "background": "Hermit",
   "alignment": "Neutral Good",
   "hitPoints": 100
 }
