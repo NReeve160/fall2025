@@ -1,126 +1,73 @@
-{
-  "openapi": "3.0.3",
-  "info": {
-    "title": "Adventurers Guild API",
-    "version": "1.0.0",
-    "description": "Local API docs"
+// swagger.js
+const swaggerAutogen = require('swagger-autogen')();
+
+const doc = {
+  info: {
+    title: 'Adventurers Guild API',
+    version: '1.0.0',
+    description:
+      'Manage D&D campaigns and adventurers. JWT-secured. Includes linking adventurers to campaigns and filtering.'
   },
-  "servers": [
-    { "url": "http://localhost:8080" }
+  servers: [
+    { url: 'http://localhost:8080' },
+    { url: 'https://fall2025.onrender.com' }
   ],
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+  components: {
+    securitySchemes: {
+      bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }
     },
-    "schemas": {
-      "Character": {
-        "type": "object",
-        "required": ["name","race","class","level","hitPoints","strength","dexterity","constitution","intelligence","wisdom","charisma","owner"],
-        "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string", "example": "Dai Jing" },
-          "race": { "type": "string", "example": "Halfling" },
-          "class": { "type": "string", "example": "Monk" },
-          "level": { "type": "integer", "minimum": 1, "maximum": 20, "example": 5 },
-          "alignment": { "type": "string", "example": "NG" },
-          "background": { "type": "string", "example": "Country doctor" },
-          "hitPoints": { "type": "integer", "minimum": 1, "example": 38 },
-          "strength": { "type": "integer", "minimum": 1, "maximum": 30, "example": 10 },
-          "dexterity": { "type": "integer", "minimum": 1, "maximum": 30, "example": 18 },
-          "constitution": { "type": "integer", "minimum": 1, "maximum": 30, "example": 12 },
-          "intelligence": { "type": "integer", "minimum": 1, "maximum": 30, "example": 14 },
-          "wisdom": { "type": "integer", "minimum": 1, "maximum": 30, "example": 16 },
-          "charisma": { "type": "integer", "minimum": 1, "maximum": 30, "example": 12 },
-          "owner": { "type": "string", "description": "MongoId of user" },
-          "campaign": { "type": "string", "nullable": true, "description": "MongoId of campaign" }
+    schemas: {
+      Adventurer: {
+        type: 'object',
+        required: [
+          'name','race','class','level','hitPoints',
+          'strength','dexterity','constitution','intelligence','wisdom','charisma',
+          'owner'
+        ],
+        properties: {
+          _id: { type: 'string' },
+          name: { type: 'string' },
+          race: { type: 'string' },
+          class: { type: 'string' },
+          level: { type: 'integer', minimum: 1, maximum: 20 },
+          alignment: { type: 'string' },
+          background: { type: 'string' },
+          hitPoints: { type: 'integer', minimum: 1 },
+          strength: { type: 'integer', minimum: 1, maximum: 30 },
+          dexterity: { type: 'integer', minimum: 1, maximum: 30 },
+          constitution: { type: 'integer', minimum: 1, maximum: 30 },
+          intelligence: { type: 'integer', minimum: 1, maximum: 30 },
+          wisdom: { type: 'integer', minimum: 1, maximum: 30 },
+          charisma: { type: 'integer', minimum: 1, maximum: 30 },
+          owner: { type: 'string', description: 'User ObjectId' },
+          campaign: { type: 'string', nullable: true, description: 'Campaign ObjectId' }
+        }
+      },
+      Campaign: {
+        type: 'object',
+        required: ['name','dm'],
+        properties: {
+          _id: { type: 'string' },
+          name: { type: 'string' },
+          description: { type: 'string' },
+          dm: { type: 'string', description: 'DM User ObjectId' },
+          players: { type: 'array', items: { type: 'string' } },
+          system: { type: 'string', default: 'D&D 5e' },
+          status: { type: 'string', enum: ['active','paused','finished'], default: 'active' }
         }
       }
     }
   },
-  "security": [{ "bearerAuth": [] }],
-  "paths": {
-    "/healthz": {
-      "get": {
-        "tags": ["Health"],
-        "summary": "Liveness probe",
-        "responses": { "200": { "description": "OK" } }
-      }
-    },
-    "/characters": {
-      "get": {
-        "tags": ["Characters"],
-        "summary": "List characters",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Character" } }
-              }
-            }
-          },
-          "401": { "description": "Unauthorized" }
-        }
-      },
-      "post": {
-        "tags": ["Characters"],
-        "summary": "Create character",
-        "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/Character" } }
-          }
-        },
-        "responses": {
-          "201": { "description": "Created" },
-          "400": { "description": "Validation error" },
-          "401": { "description": "Unauthorized" }
-        }
-      }
-    },
-    "/characters/{id}": {
-      "parameters": [
-        { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
-      ],
-      "get": {
-        "tags": ["Characters"],
-        "summary": "Get character by id",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Character" } } } },
-          "401": { "description": "Unauthorized" },
-          "404": { "description": "Not found" }
-        }
-      },
-      "put": {
-        "tags": ["Characters"],
-        "summary": "Update character",
-        "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/Character" } }
-          }
-        },
-        "responses": {
-          "200": { "description": "Updated" },
-          "400": { "description": "Validation error" },
-          "401": { "description": "Unauthorized" },
-          "404": { "description": "Not found" }
-        }
-      },
-      "delete": {
-        "tags": ["Characters"],
-        "summary": "Delete character",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "204": { "description": "Deleted" },
-          "401": { "description": "Unauthorized" },
-          "404": { "description": "Not found" }
-        }
-      }
-    }
-  }
-}
+  security: [{ bearerAuth: [] }],
+  tags: [
+    { name: 'Auth', description: 'Dev login (testing only)' },
+    { name: 'Adventurers', description: 'Player characters' },
+    { name: 'Campaigns', description: 'Game campaigns' },
+    { name: 'System', description: 'Health/status' }
+  ]
+};
+
+const outputFile = './swagger.json';     // ← the file Swagger-UI will load
+const endpointsFiles = ['./index.js'];   // ← your entry that mounts all routes
+
+swaggerAutogen(outputFile, endpointsFiles, doc);
