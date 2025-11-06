@@ -1,17 +1,33 @@
 {
-  "name": "fall2025",
+  "name": "dnd-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "A app for my CSE341 class that I also plan to use for managing my dnd games.",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "node index.js",
+    "build-docs": "node swagger.cjs",
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NReeve160/fall2025.git"
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NReeve160/fall2025/issues"
+  },
+  "homepage": "https://github.com/NReeve160/fall2025#readme",
   "dependencies": {
-    "dotenv": "^17.2.3",
+    "cookie-session": "^2.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^5.1.0",
-    "mongoose": "^8.19.1",
+    "mongoose": "^8.19.3",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
   }

@@ -1,25 +1,49 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./swagger-output.json');
-const adventurersRoutes = require('./routes/adventurers');
+import express from 'express';
+import cors from 'cors';
+import cookieSession from 'cookie-session';
+import passport from 'passport';
+import swaggerUi from 'swagger-ui-express';
+import dotenv from 'dotenv';
+
+import { readFileSync } from 'fs';
+const swaggerDoc = JSON.parse(readFileSync('./swagger.json', 'utf8'));
+import { connectMongo } from './db/mongoose.js';
+import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// ✅ MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch((err) => console.error('❌ MongoDB connection error:', err));
-
 app.use(express.json());
-app.use('/adventurers', adventurersRoutes);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use(cors({ origin: (process.env.CORS_ORIGIN || '*').split(','), credentials: true }));
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
-  console.log(`📘 Swagger docs at http://localhost:${PORT}/docs`);
-});
+app.use(cookieSession({
+  name: 'session',
+  keys: [process.env.COOKIE_KEY || 'fallback_key'],
+  maxAge: 10 * 60 * 1000
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// ✅ Updated to swagger.json
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+
+app.get('/healthz', (_req, res) => res.json({ ok: true }));
+
+app.use('/', apiRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
+
+connectMongo()
+  .then(() => {
+    app.listen(PORT, () =>
+      console.log(`✅ Adventurers Guild API running at http://localhost:${PORT}`)
+    );
+  })
+  .catch((err) => {
+    console.error('❌ Mongo connection failed:', err);
+    process.exit(1);
+  });
