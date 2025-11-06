@@ -1,27 +1,17 @@
 #########################################
-# Adventurers Guild API Test Workflow
+# Adventurers Guild API — LOCAL WORKFLOW
 #########################################
-@baseUrl = http://localhost:8080
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMSIsImVtYWlsIjoiZGV2QHVzZXIuY29tIiwicm9sZSI6IlBMQVlFUiIsImlhdCI6MTc2MjQxNTQwOSwiZXhwIjoxNzYzMDIwMjA5fQ.ou0NP-swlh2tpTsj-c-RqFs_vqeCrPSLIMaT7GYYnng
+@localUrl = http://localhost:8080
+@localToken = PASTE_LOCAL_JWT_AFTER_LOGIN
+@localCampaignId = REPLACE_AFTER_LIST
+@localAdvId = REPLACE_AFTER_LIST
 
-#################################################
-# Auth (Dev login)
-#################################################
-### Dev Login (gets JWT)
-POST {{baseUrl}}/auth/dev-login
-Content-Type: application/json
+### 0) Local Dev Login (get JWT)
+GET {{localUrl}}/auth/dev-login
 
-{
-  "providerId": "dev-user",
-  "email": "dev@user.com"
-}
-
-#########################################
-# 1) Create Campaign
-#########################################
-### Create Campaign
-POST {{baseUrl}}/campaigns
-Authorization: Bearer {{token}}
+### 1) Create Campaign (LOCAL)
+POST {{localUrl}}/campaigns
+Authorization: Bearer {{localToken}}
 Content-Type: application/json
 
 {
@@ -33,22 +23,13 @@ Content-Type: application/json
   "status": "active"
 }
 
-#########################################
-# 2) List Campaigns
-#########################################
-### List Campaigns
-GET {{baseUrl}}/campaigns
-Authorization: Bearer {{token}}
+### 2) List Campaigns (LOCAL) — copy one _id into @localCampaignId
+GET {{localUrl}}/campaigns
+Authorization: Bearer {{localToken}}
 
-# After this, copy one _id into {{campaignId}}
-@campaignId = 690c43b506edd9c8a9ef61d4
-
-#########################################
-# 3) Create Adventurer
-#########################################
-### Create Adventurer
-POST {{baseUrl}}/adventurers
-Authorization: Bearer {{token}}
+### 3) Create Adventurer (LOCAL)
+POST {{localUrl}}/adventurers
+Authorization: Bearer {{localToken}}
 Content-Type: application/json
 
 {
@@ -69,72 +50,47 @@ Content-Type: application/json
   "campaign": null
 }
 
-#########################################
-# 4) List Adventurers
-#########################################
-GET {{baseUrl}}/adventurers
-Authorization: Bearer {{token}}
+### 4) List Adventurers (LOCAL) — copy one _id into @localAdvId
+GET {{localUrl}}/adventurers
+Authorization: Bearer {{localToken}}
 
-# Copy one _id into {{advId}}
-@advId = 690c5363f52fb2040a2cd2ae
-
-#########################################
-# 5) Update Adventurer to join Campaign
-#########################################
-### Link to Campaign
-PUT {{baseUrl}}/adventurers/{{advId}}
-Authorization: Bearer {{token}}
+### 5) Link Adventurer to Campaign (LOCAL)
+PUT {{localUrl}}/adventurers/{{localAdvId}}
+Authorization: Bearer {{localToken}}
 Content-Type: application/json
 
 {
-  "campaign": "{{campaignId}}"
+  "campaign": "{{localCampaignId}}"
 }
 
-#########################################
-# 6) List Adventurers in Campaign
-#########################################
-### Should show only linked adventurers
-GET {{baseUrl}}/adventurers?campaign={{campaignId}}
-Authorization: Bearer {{token}}
+### 6) List Adventurers in Campaign (LOCAL)
+GET {{localUrl}}/adventurers?campaign={{localCampaignId}}
+Authorization: Bearer {{localToken}}
 
-#########################################
-# 7) Remove Adventurer (Delete)
-#########################################
-DELETE {{baseUrl}}/adventurers/{{advId}}
-Authorization: Bearer {{token}}
+### 7) Delete Adventurer (LOCAL)
+DELETE {{localUrl}}/adventurers/{{localAdvId}}
+Authorization: Bearer {{localToken}}
 
-#########################################
-# 8) Remove Campaign (Delete)
-#########################################
-DELETE {{baseUrl}}/campaigns/{{campaignId}}
-Authorization: Bearer {{token}}
+### 8) Delete Campaign (LOCAL)
+DELETE {{localUrl}}/campaigns/{{localCampaignId}}
+Authorization: Bearer {{localToken}}
 
 
 
 #########################################
-# Adventurers Guild API Test Workflow Through Render
+# Adventurers Guild API — RENDER WORKFLOW
 #########################################
-@baseUrl = https://fall2025.onrender.com
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMSIsImVtYWlsIjoiZGV2QHVzZXIuY29tIiwicm9sZSI6IlBMQVlFUiIsImlhdCI6MTc2MjQxNTcyNiwiZXhwIjoxNzYzMDIwNTI2fQ.SPeNrQPnIr-13yrhA3WeNyEjSzSZg4efl4DPlvgfPIE
+@renderUrl = https://fall2025.onrender.com
+@renderToken = PASTE_RENDER_JWT_AFTER_LOGIN
+@renderCampaignId = REPLACE_AFTER_LIST
+@renderAdvId = REPLACE_AFTER_LIST
 
-#################################################
-# Auth (Dev login)
-#################################################
-### Dev Login (gets JWT)
-POST {{baseUrl}}/auth/dev-login
-Content-Type: application/json
+### 0) Render Dev Login (get JWT)
+GET {{renderUrl}}/auth/dev-login
 
-{
-  "providerId": "dev-user",
-  "email": "dev@user.com"
-}
-
-#########################################
-# 1) Create Campaign
-#########################################
-### Create Campaign
-POST {{baseUrl}}/campaigns
-Authorization: Bearer {{token}}
+### 1) Create Campaign (RENDER)
+POST {{renderUrl}}/campaigns
+Authorization: Bearer {{renderToken}}
 Content-Type: application/json
 
 {
@@ -146,22 +102,13 @@ Content-Type: application/json
   "status": "active"
 }
 
-#########################################
-# 2) List Campaigns
-#########################################
-### List Campaigns
-GET {{baseUrl}}/campaigns
-Authorization: Bearer {{token}}
+### 2) List Campaigns (RENDER) — copy one _id into @renderCampaignId
+GET {{renderUrl}}/campaigns
+Authorization: Bearer {{renderToken}}
 
-# After this, copy one _id into {{campaignId}}
-@campaignId = 690c43b506edd9c8a9ef61d4
-
-#########################################
-# 3) Create Adventurer
-#########################################
-### Create Adventurer
-POST {{baseUrl}}/adventurers
-Authorization: Bearer {{token}}
+### 3) Create Adventurer (RENDER)
+POST {{renderUrl}}/adventurers
+Authorization: Bearer {{renderToken}}
 Content-Type: application/json
 
 {
@@ -182,42 +129,27 @@ Content-Type: application/json
   "campaign": null
 }
 
-#########################################
-# 4) List Adventurers
-#########################################
-GET {{baseUrl}}/adventurers
-Authorization: Bearer {{token}}
+### 4) List Adventurers (RENDER) — copy one _id into @renderAdvId
+GET {{renderUrl}}/adventurers
+Authorization: Bearer {{renderToken}}
 
-# Copy one _id into {{advId}}
-@advId = 690c5363f52fb2040a2cd2ae
-
-#########################################
-# 5) Update Adventurer to join Campaign
-#########################################
-### Link to Campaign
-PUT {{baseUrl}}/adventurers/{{advId}}
-Authorization: Bearer {{token}}
+### 5) Link Adventurer to Campaign (RENDER)
+PUT {{renderUrl}}/adventurers/{{renderAdvId}}
+Authorization: Bearer {{renderToken}}
 Content-Type: application/json
 
 {
-  "campaign": "{{campaignId}}"
+  "campaign": "{{renderCampaignId}}"
 }
 
-#########################################
-# 6) List Adventurers in Campaign
-#########################################
-### Should show only linked adventurers
-GET {{baseUrl}}/adventurers?campaign={{campaignId}}
-Authorization: Bearer {{token}}
+### 6) List Adventurers in Campaign (RENDER)
+GET {{renderUrl}}/adventurers?campaign={{renderCampaignId}}
+Authorization: Bearer {{renderToken}}
 
-#########################################
-# 7) Remove Adventurer (Delete)
-#########################################
-DELETE {{baseUrl}}/adventurers/{{advId}}
-Authorization: Bearer {{token}}
+### 7) Delete Adventurer (RENDER)
+DELETE {{renderUrl}}/adventurers/{{renderAdvId}}
+Authorization: Bearer {{renderToken}}
 
-#########################################
-# 8) Remove Campaign (Delete)
-#########################################
-DELETE {{baseUrl}}/campaigns/{{campaignId}}
-Authorization: Bearer {{token}}
+### 8) Delete Campaign (RENDER)
+DELETE {{renderUrl}}/campaigns/{{renderCampaignId}}
+Authorization: Bearer {{renderToken}}
