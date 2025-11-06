@@ -1,14 +1,37 @@
 {
-  "openapi": "3.0.3",
+  "swagger": "2.0",
   "info": {
     "title": "Adventurers Guild API",
     "version": "1.0.0",
-    "description": "API documentation for Adventurers Guild"
+    "description": "Manage D&D campaigns and their adventurers."
   },
+  "host": "localhost:3000",
   "servers": [
     {
       "url": "http://localhost:8080"
     }
+  ],
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Adventurers",
+      "description": "Player characters"
+    },
+    {
+      "name": "Campaigns",
+      "description": "Game campaigns and players"
+    },
+    {
+      "name": "Auth",
+      "description": "Developer login for testing"
+    },
+    {
+      "name": "System",
+      "description": "System status & operations"
+    }
+  ],
+  "schemes": [
+    "http"
   ],
   "paths": {
     "/healthz": {
@@ -21,9 +44,29 @@
         }
       }
     },
-    "/auth/google": {
-      "get": {
+    "/auth/dev-login": {
+      "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "id": {
+                  "example": "any"
+                },
+                "role": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -31,29 +74,16 @@
         }
       }
     },
-    "/auth/success": {
+    "/adventurers/": {
       "get": {
         "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+        "parameters": [
+          {
+            "name": "campaign",
+            "in": "query",
+            "type": "string"
           }
-        }
-      }
-    },
-    "/auth/failure": {
-      "get": {
-        "description": "",
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/characters/": {
-      "get": {
-        "description": "",
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -69,7 +99,7 @@
         }
       }
     },
-    "/characters/{id}": {
+    "/adventurers/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -77,14 +107,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -95,14 +126,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -113,14 +145,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -151,14 +184,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -169,14 +203,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -187,67 +222,20 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
     },
-    "/google": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/success": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/failure": {
-      "get": {
-        "description": "",
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
-          }
-        }
-      }
-    },
-    "/{id}": {
+    "/campaigns/{id}/adventurers": {
       "get": {
         "description": "",
         "parameters": [
@@ -255,50 +243,12 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
           }
         }
       }
@@ -311,372 +261,6 @@
         "scheme": "bearer",
         "bearerFormat": "JWT"
       }
-    },
-    "schemas": {
-      "Character": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "example": "object"
-          },
-          "required": {
-            "type": "array",
-            "example": [
-              "name",
-              "race",
-              "class",
-              "level",
-              "hitPoints",
-              "strength",
-              "dexterity",
-              "constitution",
-              "intelligence",
-              "wisdom",
-              "charisma",
-              "owner"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "properties": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "Dai Jing"
-                  }
-                }
-              },
-              "race": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "Halfling"
-                  }
-                }
-              },
-              "class": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "Monk"
-                  }
-                }
-              },
-              "level": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 5
-                  },
-                  "minimum": {
-                    "type": "number",
-                    "example": 1
-                  },
-                  "maximum": {
-                    "type": "number",
-                    "example": 20
-                  }
-                }
-              },
-              "alignment": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "NG"
-                  }
-                }
-              },
-              "background": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "Country doctor"
-                  }
-                }
-              },
-              "hitPoints": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 38
-                  }
-                }
-              },
-              "strength": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 10
-                  }
-                }
-              },
-              "dexterity": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 18
-                  }
-                }
-              },
-              "constitution": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 12
-                  }
-                }
-              },
-              "intelligence": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 14
-                  }
-                }
-              },
-              "wisdom": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 16
-                  }
-                }
-              },
-              "charisma": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "integer"
-                  },
-                  "example": {
-                    "type": "number",
-                    "example": 12
-                  }
-                }
-              },
-              "owner": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "60c72b2f9f1b8b001c8a0001"
-                  }
-                }
-              },
-              "campaign": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "nullable": {
-                    "type": "boolean",
-                    "example": true
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "60c72b2f9f1b8b001c8a0002"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "Campaign": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "example": "object"
-          },
-          "required": {
-            "type": "array",
-            "example": [
-              "name",
-              "dm"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "properties": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "Shattered Isles"
-                  }
-                }
-              },
-              "description": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "Floating islands campaign."
-                  }
-                }
-              },
-              "dm": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "60c72b2f9f1b8b001c8a0001"
-                  }
-                }
-              },
-              "players": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "array"
-                  },
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "example": "string"
-                      }
-                    }
-                  }
-                }
-              },
-              "system": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "D&D 5e"
-                  }
-                }
-              },
-              "status": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "example": "string"
-                  },
-                  "enum": {
-                    "type": "array",
-                    "example": [
-                      "active",
-                      "paused",
-                      "finished"
-                    ],
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "example": {
-                    "type": "string",
-                    "example": "active"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
-  },
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ]
+  }
 }

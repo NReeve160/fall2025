@@ -1,0 +1,110 @@
+#########################################
+# Adventurers Guild API Test Workflow
+#########################################
+@baseUrl = http://localhost:8080
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMSIsImVtYWlsIjoiZGV2QHVzZXIuY29tIiwicm9sZSI6IlBMQVlFUiIsImlhdCI6MTc2MjQxNTQwOSwiZXhwIjoxNzYzMDIwMjA5fQ.ou0NP-swlh2tpTsj-c-RqFs_vqeCrPSLIMaT7GYYnng
+
+#################################################
+# Auth (Dev login)
+#################################################
+### Dev Login (gets JWT)
+POST {{baseUrl}}/auth/dev-login
+Content-Type: application/json
+
+{
+  "providerId": "dev-user",
+  "email": "dev@user.com"
+}
+
+#########################################
+# 1) Create Campaign
+#########################################
+### Create Campaign
+POST {{baseUrl}}/campaigns
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Shattered Isles",
+  "description": "Floating islands campaign.",
+  "dm": "000000000000000000000010",
+  "players": [],
+  "system": "D&D 5e",
+  "status": "active"
+}
+
+#########################################
+# 2) List Campaigns
+#########################################
+### List Campaigns
+GET {{baseUrl}}/campaigns
+Authorization: Bearer {{token}}
+
+# After this, copy one _id into {{campaignId}}
+@campaignId = 690c43b506edd9c8a9ef61d4
+
+#########################################
+# 3) Create Adventurer
+#########################################
+### Create Adventurer
+POST {{baseUrl}}/adventurers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Dai Jing",
+  "race": "Halfling",
+  "class": "Monk",
+  "level": 5,
+  "alignment": "NG",
+  "background": "Country doctor",
+  "hitPoints": 38,
+  "strength": 10,
+  "dexterity": 18,
+  "constitution": 12,
+  "intelligence": 14,
+  "wisdom": 16,
+  "charisma": 12,
+  "owner": "000000000000000000000001",
+  "campaign": null
+}
+
+#########################################
+# 4) List Adventurers
+#########################################
+GET {{baseUrl}}/adventurers
+Authorization: Bearer {{token}}
+
+# Copy one _id into {{advId}}
+@advId = 690c5363f52fb2040a2cd2ae
+
+#########################################
+# 5) Update Adventurer to join Campaign
+#########################################
+### Link to Campaign
+PUT {{baseUrl}}/adventurers/{{advId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "campaign": "{{campaignId}}"
+}
+
+#########################################
+# 6) List Adventurers in Campaign
+#########################################
+### Should show only linked adventurers
+GET {{baseUrl}}/adventurers?campaign={{campaignId}}
+Authorization: Bearer {{token}}
+
+#########################################
+# 7) Remove Adventurer (Delete)
+#########################################
+DELETE {{baseUrl}}/adventurers/{{advId}}
+Authorization: Bearer {{token}}
+
+#########################################
+# 8) Remove Campaign (Delete)
+#########################################
+DELETE {{baseUrl}}/campaigns/{{campaignId}}
+Authorization: Bearer {{token}}

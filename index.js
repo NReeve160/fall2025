@@ -8,7 +8,7 @@ import { readFileSync } from 'fs';
 
 import { connectMongo } from './db/mongoose.js';
 import authRoutes from './routes/auth.js';
-import charactersRoutes from './routes/characters.js';
+import adventurersRoutes from './routes/adventurers.js';
 import campaignsRoutes from './routes/campaigns.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
@@ -45,7 +45,7 @@ app.get('/healthz', (_req, res) => res.json({ ok: true }));
 
 // 5) ROUTES
 app.use('/auth', authRoutes);
-app.use('/characters', charactersRoutes);
+app.use('/adventurers', adventurersRoutes);
 app.use('/campaigns', campaignsRoutes);
 
 // 6) 404 + ERROR HANDLER

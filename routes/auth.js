@@ -1,19 +1,17 @@
 // routes/auth.js
 import { Router } from 'express';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
-// Placeholder endpoints so the app starts
-router.get('/google', (_req, res) => {
-  res.json({ todo: 'Implement Google OAuth here' });
-});
-
-router.get('/success', (_req, res) => {
-  res.json({ message: 'OAuth success placeholder' });
-});
-
-router.get('/failure', (_req, res) => {
-  res.status(401).json({ error: 'OAuth failed (placeholder)' });
+/**
+ * Dev-only login to get a JWT quickly for testing.
+ * POST /auth/dev-login { "email": "you@example.com", "id": "64d..." }
+ */
+router.post('/dev-login', (req, res) => {
+  const { email = 'dev@example.com', id = '000000000000000000000001', role = 'PLAYER' } = req.body || {};
+  const token = jwt.sign({ id, email, role }, process.env.JWT_SECRET || 'dev_secret', { expiresIn: '7d' });
+  res.json({ token });
 });
 
 export default router;
