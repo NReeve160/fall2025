@@ -1,13 +1,24 @@
+###
+GET http://localhost:8080/healthz
+
 #########################################
 # Adventurers Guild API — LOCAL WORKFLOW
 #########################################
 @localUrl = http://localhost:8080
-@localToken = PASTE_LOCAL_JWT_AFTER_LOGIN
-@localCampaignId = REPLACE_AFTER_LIST
-@localAdvId = REPLACE_AFTER_LIST
+@localToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0MjgzMjUsImV4cCI6MTc2MzAzMzEyNX0.6stJF5b_Qp-IaDDicjvWHlgbjDCMr63Lm1ZuyfjvgrI
+@localAdvId = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0MjgzMjUsImV4cCI6MTc2MzAzMzEyNX0.6stJF5b_Qp-IaDDicjvWHlgbjDCMr63Lm1ZuyfjvgrI
 
 ### 0) Local Dev Login (get JWT)
-GET {{localUrl}}/auth/dev-login
+POST {{localUrl}}/auth/dev-login
+Content-Type: application/json
+
+{
+  "email": "dm@example.com",
+  "id": "000000000000000000000010",
+  "role": "DM"
+}
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0MjgzMjUsImV4cCI6MTc2MzAzMzEyNX0.6stJF5b_Qp-IaDDicjvWHlgbjDCMr63Lm1ZuyfjvgrI
 
 ### 1) Create Campaign (LOCAL)
 POST {{localUrl}}/campaigns
@@ -23,7 +34,7 @@ Content-Type: application/json
   "status": "active"
 }
 
-### 2) List Campaigns (LOCAL) — copy one _id into @localCampaignId
+### 2) List Campaigns (LOCAL)
 GET {{localUrl}}/campaigns
 Authorization: Bearer {{localToken}}
 
@@ -50,7 +61,7 @@ Content-Type: application/json
   "campaign": null
 }
 
-### 4) List Adventurers (LOCAL) — copy one _id into @localAdvId
+### 4) List Adventurers (LOCAL)
 GET {{localUrl}}/adventurers
 Authorization: Bearer {{localToken}}
 
@@ -81,12 +92,21 @@ Authorization: Bearer {{localToken}}
 # Adventurers Guild API — RENDER WORKFLOW
 #########################################
 @renderUrl = https://fall2025.onrender.com
-@renderToken = PASTE_RENDER_JWT_AFTER_LOGIN
+@renderToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0Mjc5NzgsImV4cCI6MTc2MzAzMjc3OH0.EJEcdUoYM0qegTVD_zO4bNwsL_xW4zic4sWSL6jZl6Y
 @renderCampaignId = REPLACE_AFTER_LIST
 @renderAdvId = REPLACE_AFTER_LIST
 
 ### 0) Render Dev Login (get JWT)
-GET {{renderUrl}}/auth/dev-login
+POST {{renderUrl}}/auth/dev-login
+Content-Type: application/json
+
+{
+  "email": "dm@example.com",
+  "id": "000000000000000000000010",
+  "role": "DM"
+}
+
+@token = PASTE_YOUR_TOKEN_HERE
 
 ### 1) Create Campaign (RENDER)
 POST {{renderUrl}}/campaigns
@@ -102,7 +122,7 @@ Content-Type: application/json
   "status": "active"
 }
 
-### 2) List Campaigns (RENDER) — copy one _id into @renderCampaignId
+### 2) List Campaigns (RENDER)
 GET {{renderUrl}}/campaigns
 Authorization: Bearer {{renderToken}}
 
@@ -129,7 +149,7 @@ Content-Type: application/json
   "campaign": null
 }
 
-### 4) List Adventurers (RENDER) — copy one _id into @renderAdvId
+### 4) List Adventurers (RENDER)
 GET {{renderUrl}}/adventurers
 Authorization: Bearer {{renderToken}}
 
