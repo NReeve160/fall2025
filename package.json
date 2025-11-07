@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js",
-    "build-docs": "node swagger.cjs",
+    "swagger:gen": "node swagger.js",
     "test": "node index.js"
   },
   "repository": {
