@@ -172,3 +172,11 @@ Authorization: Bearer {{renderToken}}
 ### 8) Delete Campaign (RENDER)
 DELETE {{renderUrl}}/campaigns/690c8c229d8971597767b2a5
 Authorization: Bearer {{renderToken}}
+
+### Step 1: Start Google OAuth (open this link in browser)
+GET http://localhost:8080/auth/google?state=http%3A%2F%2Flocalhost%3A5173&json=1
+
+{
+  "email": "reeve.nathan160@gmail.com",
+  "password": "BeyondBatmanJK:D01"
+}

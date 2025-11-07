@@ -1,8 +1,15 @@
-# Environment variables
-.env
-
-# Node artifacts
+# Node essentials
 node_modules/
 npm-debug.log*
-package-lock.json
+yarn-error.log*
+dist/
+coverage/
+
+# OS/editor noise
 .DS_Store
+.vscode/
+
+# Env files
+.env
+.env.*
+!.env.example
