@@ -2,18 +2,22 @@
 const swaggerAutogen = require('swagger-autogen')({ openapi: '3.0.0' }); // <-- force OAS3
 
 const doc = {
-  info: { title: 'Adventurers Guild API', version: '1.0.0' },
-  // OAS3 uses "servers" (do NOT include host/basePath/schemes)
-  servers: [
-    { url: 'https://fall2025.onrender.com' },   // put Render FIRST so it’s default
-    { url: 'http://localhost:8080' }
-  ],
-  components: {
-    securitySchemes: {
-      bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }
+  info: {
+    title: 'Adventurer’s Guild API',
+    description: 'API for managing D&D adventurers',
+    version: '1.0.0',
+  },
+  host: 'localhost:8080',
+  schemes: ['http'],
+  securityDefinitions: {
+    bearerAuth: {
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header',
+      description: 'Enter JWT token as: Bearer <token>'
     }
   },
-  security: [{ bearerAuth: [] }]
+  security: [{ bearerAuth: [] }],
 };
 
 const outputFile = './swagger.json';
