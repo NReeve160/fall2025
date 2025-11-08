@@ -13,10 +13,21 @@ const badReq = (res, msg) => res.status(400).json({ error: msg });
 /* ---------------------------------------
  * GET /adventurers?campaign=<campaignId>
  * -------------------------------------*/
-// #swagger.tags = ['Adventurers']
-// #swagger.security = [{ bearerAuth: [] }]
-// #swagger.description = 'List adventurers. Optional filter by campaign id.'
-// #swagger.parameters['campaign'] = { in: 'query', schema: { type: 'string' }, required: false }
+  /* #swagger.tags = ['Adventurers']
+     #swagger.summary = 'List adventurers'
+     #swagger.security = [{ bearerAuth: [] }]
+     #swagger.parameters['campaign'] = {
+       in: 'query',
+       description: 'Filter by campaign id',
+       required: false,
+       schema: { type: 'string', example: '671a0d52f23c7f1d01e0c777' }
+     }
+     #swagger.responses[200] = {
+       description: 'Array of adventurers',
+       content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Adventurer' } } } }
+     }
+     #swagger.responses[401] = { description: 'Unauthorized' }
+  */
 router.get('/', requireAuth, async (req, res, next) => {
   try {
     const filter =
@@ -33,12 +44,38 @@ router.get('/', requireAuth, async (req, res, next) => {
 /* -------------------------
  * POST /adventurers
  * -----------------------*/
-// #swagger.tags = ['Adventurers']
-// #swagger.security = [{ bearerAuth: [] }]
-// #swagger.requestBody = {
-// #  required: true,
-// #  content: { "application/json": { schema: { $ref: "#/components/schemas/Adventurer" } } }
-// #}
+  /* #swagger.tags = ['Adventurers']
+     #swagger.summary = 'Create an adventurer'
+     #swagger.security = [{ bearerAuth: [] }]
+     #swagger.requestBody = {
+       required: true,
+       content: {
+         'application/json': {
+           schema: { $ref: '#/components/schemas/Adventurer' },
+           examples: {
+             sample: {
+               value: {
+                 name: 'Arannis',
+                 race: 'Elf',
+                 class: 'Ranger',
+                 level: 3,
+                 alignment: 'CG',
+                 background: 'Outlander',
+                 hitPoints: 24,
+                 campaign: null
+               }
+             }
+           }
+         }
+       }
+     }
+     #swagger.responses[201] = {
+       description: 'Created',
+       content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } }
+     }
+     #swagger.responses[400] = { description: 'Validation error' }
+     #swagger.responses[401] = { description: 'Unauthorized' }
+  */
 router.post('/', requireAuth, async (req, res, next) => {
   try {
     // If campaign is provided, validate it exists
@@ -63,9 +100,14 @@ router.post('/', requireAuth, async (req, res, next) => {
 /* -------------------------------
  * GET /adventurers/:id
  * -----------------------------*/
-// #swagger.tags = ['Adventurers']
-// #swagger.security = [{ bearerAuth: [] }]
-// #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
+  /* #swagger.tags = ['Adventurers']
+     #swagger.summary = 'Get an adventurer by id'
+     #swagger.security = [{ bearerAuth: [] }]
+     #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
+     #swagger.responses[200] = { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } } }
+     #swagger.responses[401] = { description: 'Unauthorized' }
+     #swagger.responses[404] = { description: 'Not Found' }
+  */
 router.get('/:id', requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -83,13 +125,23 @@ router.get('/:id', requireAuth, async (req, res, next) => {
 /* -------------------------------
  * PUT /adventurers/:id
  * -----------------------------*/
-// #swagger.tags = ['Adventurers']
-// #swagger.security = [{ bearerAuth: [] }]
-// #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
-// #swagger.requestBody = {
-// #  required: true,
-// #  content: { "application/json": { schema: { $ref: "#/components/schemas/Adventurer" } } }
-// #}
+  /* #swagger.tags = ['Adventurers']
+     #swagger.summary = 'Update an adventurer'
+     #swagger.security = [{ bearerAuth: [] }]
+     #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
+     #swagger.requestBody = {
+       required: true,
+       content: {
+         'application/json': {
+           schema: { $ref: '#/components/schemas/Adventurer' }
+         }
+       }
+     }
+     #swagger.responses[200] = { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } } }
+     #swagger.responses[400] = { description: 'Validation error' }
+     #swagger.responses[401] = { description: 'Unauthorized' }
+     #swagger.responses[404] = { description: 'Not Found' }
+  */
 router.put('/:id', requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -121,9 +173,14 @@ router.put('/:id', requireAuth, async (req, res, next) => {
 /* --------------------------------
  * DELETE /adventurers/:id
  * ------------------------------*/
-// #swagger.tags = ['Adventurers']
-// #swagger.security = [{ bearerAuth: [] }]
-// #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
+  /* #swagger.tags = ['Campaigns']
+     #swagger.summary = 'List campaigns'
+     #swagger.security = []  // public
+     #swagger.responses[200] = {
+       description: 'Array of campaigns',
+       content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Campaign' } } } }
+     }
+  */
 router.delete('/:id', requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;

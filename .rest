@@ -5,7 +5,7 @@ GET http://localhost:8080/healthz
 # Adventurers Guild API — LOCAL WORKFLOW
 #########################################
 @localUrl = http://localhost:8080
-@localToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0Mjk2MzIsImV4cCI6MTc2MzAzNDQzMn0.ePdBlnR3Qev9fJ4yYOK2E21Q_08rlgLoat_exl1drGo
+@localToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI1NTIxNDQsImV4cCI6MTc2MzE1Njk0NH0.dAQ6eEsI57I_GTdxHWJ-mFyjRHS3anbH5km_zMgysNM
 
 ### 0) Local Dev Login (get JWT)
 POST {{localUrl}}/auth/dev-login
@@ -16,9 +16,6 @@ Content-Type: application/json
   "id": "000000000000000000000010",
   "role": "DM"
 }
-
-###
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0Mjk2MzIsImV4cCI6MTc2MzAzNDQzMn0.ePdBlnR3Qev9fJ4yYOK2E21Q_08rlgLoat_exl1drGo
 
 ### 1) Create Campaign (LOCAL)
 POST {{localUrl}}/campaigns
@@ -66,24 +63,24 @@ GET {{localUrl}}/adventurers
 Authorization: Bearer {{localToken}}
 
 ### 5) Link Adventurer to Campaign (LOCAL)
-PUT {{localUrl}}/adventurers/690c8b282543c7036d7cd533
+PUT {{localUrl}}/adventurers/690e6978d36f45274fc10328
 Authorization: Bearer {{localToken}}
 Content-Type: application/json
 
 {
-  "campaign": "690c8b1f2543c7036d7cd530"
+  "campaign": "690e695dd36f45274fc10325"
 }
 
 ### 6) List Adventurers in Campaign (LOCAL)
-GET {{localUrl}}/adventurers?campaign=690c8b1f2543c7036d7cd530
+GET {{localUrl}}/adventurers?campaign=690e695dd36f45274fc10325
 Authorization: Bearer {{localToken}}
 
 ### 7) Delete Adventurer (LOCAL)
-DELETE {{localUrl}}/adventurers/690c861b1feb29a756b6d4a1
+DELETE {{localUrl}}/adventurers/690e6978d36f45274fc10328
 Authorization: Bearer {{localToken}}
 
 ### 8) Delete Campaign (LOCAL)
-DELETE {{localUrl}}/campaigns/690c861b1feb29a756b6d4a1
+DELETE {{localUrl}}/campaigns/690e695dd36f45274fc10325
 Authorization: Bearer {{localToken}}
 
 
@@ -91,8 +88,11 @@ Authorization: Bearer {{localToken}}
 #########################################
 # Adventurers Guild API — RENDER WORKFLOW
 #########################################
+###
+GET https://fall2025.onrender.com/healthz
+
 @renderUrl = https://fall2025.onrender.com
-@renderToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0Mjk5NjYsImV4cCI6MTc2MzAzNDc2Nn0.u1_fI9Xmwyt_Rf1Ujxj9s0q11gMW0JvoMeaPV5nALws
+@renderToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI1NTIyNjksImV4cCI6MTc2MzE1NzA2OX0.n6q3Y5OPBidf11Dy8AbZz9b6E7XD08hsTYrnAk1ZGnc
 
 ### 0) Render Dev Login (get JWT)
 POST {{renderUrl}}/auth/dev-login
@@ -103,9 +103,6 @@ Content-Type: application/json
   "id": "000000000000000000000010",
   "role": "DM"
 }
-
-###
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI0Mjk5NjYsImV4cCI6MTc2MzAzNDc2Nn0.u1_fI9Xmwyt_Rf1Ujxj9s0q11gMW0JvoMeaPV5nALws
 
 ### 1) Create Campaign (RENDER)
 POST {{renderUrl}}/campaigns
@@ -131,7 +128,7 @@ Authorization: Bearer {{renderToken}}
 Content-Type: application/json
 
 {
-  "name": "Dai Jing",
+  "name": "Robin Hood",
   "race": "Halfling",
   "class": "Monk",
   "level": 5,
@@ -153,22 +150,22 @@ GET {{renderUrl}}/adventurers
 Authorization: Bearer {{renderToken}}
 
 ### 5) Link Adventurer to Campaign (RENDER)
-PUT {{renderUrl}}/adventurers/690c8c459d8971597767b2a7
+PUT {{renderUrl}}/adventurers/690e6a00204452276edd0452
 Authorization: Bearer {{renderToken}}
 Content-Type: application/json
 
 {
-  "campaign": "690c8c229d8971597767b2a5"
+  "campaign": "690e69e3204452276edd044f"
 }
 
 ### 6) List Adventurers in Campaign (RENDER)
-GET {{renderUrl}}/adventurers?campaign=690c8c229d8971597767b2a5
+GET {{renderUrl}}/adventurers?campaign=690e69e3204452276edd044f
 Authorization: Bearer {{renderToken}}
 
 ### 7) Delete Adventurer (RENDER)
-DELETE {{renderUrl}}/adventurers/690c8c459d8971597767b2a7
+DELETE {{renderUrl}}/adventurers/690e67a3204452276edd0440
 Authorization: Bearer {{renderToken}}
 
 ### 8) Delete Campaign (RENDER)
-DELETE {{renderUrl}}/campaigns/690c8c229d8971597767b2a5
+DELETE {{renderUrl}}/campaigns/690e69e3204452276edd044f
 Authorization: Bearer {{renderToken}}

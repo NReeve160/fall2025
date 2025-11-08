@@ -1,10 +1,13 @@
+import dotenv from 'dotenv';
+dotenv.config();
+const { default: passport, configurePassport } = await import('./config/passport.js');
+configurePassport();
+
 import express from 'express';
 import cors from 'cors';
-import cookieSession from 'cookie-session';
-import passport from 'passport';
-import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import { readFileSync } from 'fs';
+configurePassport();
 
 import { connectMongo } from './db/mongoose.js';
 import authRoutes from './routes/auth.js';
@@ -12,21 +15,17 @@ import adventurersRoutes from './routes/adventurers.js';
 import campaignsRoutes from './routes/campaigns.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
-dotenv.config();
-
 // 1) CREATE APP FIRST
 const app = express();
 
 // 2) CORE MIDDLEWARE
 app.use(express.json());
-app.use(cors({ origin: (process.env.CORS_ORIGIN || '*').split(','), credentials: true }));
-app.use(cookieSession({
-  name: 'session',
-  keys: [process.env.COOKIE_KEY || 'fallback_key'],
-  maxAge: 10 * 60 * 1000
+app.use(cors({
+  origin: (process.env.CORS_ORIGIN || '*').split(','),
+  // For JWT in Authorization header, no cookies are needed:
+  credentials: false
 }));
 app.use(passport.initialize());
-app.use(passport.session());
 
 // 3) SWAGGER (load file safely)
 let swaggerDoc;
