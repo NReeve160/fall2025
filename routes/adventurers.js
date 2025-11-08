@@ -13,6 +13,7 @@ const badReq = (res, msg) => res.status(400).json({ error: msg });
 /* ---------------------------------------
  * GET /adventurers?campaign=<campaignId>
  * -------------------------------------*/
+router.get('/', requireAuth, async (req, res, next) => {
   /* #swagger.tags = ['Adventurers']
      #swagger.summary = 'List adventurers'
      #swagger.security = [{ bearerAuth: [] }]
@@ -28,22 +29,20 @@ const badReq = (res, msg) => res.status(400).json({ error: msg });
      }
      #swagger.responses[401] = { description: 'Unauthorized' }
   */
-router.get('/', requireAuth, async (req, res, next) => {
   try {
-    const filter =
-      req.query.campaign && isId(req.query.campaign)
-        ? { campaign: req.query.campaign }
-        : {};
+    if (req.query.campaign) {
+      if (!isId(req.query.campaign)) return badReq(res, 'Invalid campaign id');
+    }
+    const filter = req.query.campaign ? { campaign: req.query.campaign } : {};
     const items = await Adventurer.find(filter).lean();
     res.json(items);
-  } catch (e) {
-    next(e);
-  }
+  } catch (e) { next(e); }
 });
 
 /* -------------------------
  * POST /adventurers
  * -----------------------*/
+router.post('/', requireAuth, async (req, res, next) => {
   /* #swagger.tags = ['Adventurers']
      #swagger.summary = 'Create an adventurer'
      #swagger.security = [{ bearerAuth: [] }]
@@ -76,7 +75,6 @@ router.get('/', requireAuth, async (req, res, next) => {
      #swagger.responses[400] = { description: 'Validation error' }
      #swagger.responses[401] = { description: 'Unauthorized' }
   */
-router.post('/', requireAuth, async (req, res, next) => {
   try {
     // If campaign is provided, validate it exists
     if (req.body.campaign != null) {
@@ -100,49 +98,49 @@ router.post('/', requireAuth, async (req, res, next) => {
 /* -------------------------------
  * GET /adventurers/:id
  * -----------------------------*/
+router.get('/:id', requireAuth, async (req, res, next) => {
   /* #swagger.tags = ['Adventurers']
      #swagger.summary = 'Get an adventurer by id'
      #swagger.security = [{ bearerAuth: [] }]
      #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
-     #swagger.responses[200] = { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } } }
+     #swagger.responses[200] = {
+       description: 'OK',
+       content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } }
+     }
      #swagger.responses[401] = { description: 'Unauthorized' }
      #swagger.responses[404] = { description: 'Not Found' }
   */
-router.get('/:id', requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!isId(id)) return badReq(res, 'Invalid id');
 
-    const item = await Adventurer.findById(id);
+    const item = await Adventurer.findById(id).lean();
     if (!item) return res.status(404).json({ error: 'Not found' });
 
     res.json(item);
-  } catch (e) {
-    next(e);
-  }
+  } catch (e) { next(e); }
 });
 
 /* -------------------------------
  * PUT /adventurers/:id
  * -----------------------------*/
+router.put('/:id', requireAuth, async (req, res, next) => {
   /* #swagger.tags = ['Adventurers']
      #swagger.summary = 'Update an adventurer'
      #swagger.security = [{ bearerAuth: [] }]
      #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
      #swagger.requestBody = {
        required: true,
-       content: {
-         'application/json': {
-           schema: { $ref: '#/components/schemas/Adventurer' }
-         }
-       }
+       content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } }
      }
-     #swagger.responses[200] = { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } } }
+     #swagger.responses[200] = {
+       description: 'OK',
+       content: { 'application/json': { schema: { $ref: '#/components/schemas/Adventurer' } } }
+     }
      #swagger.responses[400] = { description: 'Validation error' }
      #swagger.responses[401] = { description: 'Unauthorized' }
      #swagger.responses[404] = { description: 'Not Found' }
   */
-router.put('/:id', requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!isId(id)) return badReq(res, 'Invalid id');
@@ -173,15 +171,15 @@ router.put('/:id', requireAuth, async (req, res, next) => {
 /* --------------------------------
  * DELETE /adventurers/:id
  * ------------------------------*/
-  /* #swagger.tags = ['Campaigns']
-     #swagger.summary = 'List campaigns'
-     #swagger.security = []  // public
-     #swagger.responses[200] = {
-       description: 'Array of campaigns',
-       content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Campaign' } } } }
-     }
-  */
 router.delete('/:id', requireAuth, async (req, res, next) => {
+  /* #swagger.tags = ['Adventurers']
+     #swagger.summary = 'Delete an adventurer'
+     #swagger.security = [{ bearerAuth: [] }]
+     #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
+     #swagger.responses[204] = { description: 'No Content' }
+     #swagger.responses[401] = { description: 'Unauthorized' }
+     #swagger.responses[404] = { description: 'Not Found' }
+  */
   try {
     const { id } = req.params;
     if (!isId(id)) return badReq(res, 'Invalid id');
@@ -190,9 +188,7 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
     if (!deleted) return res.status(404).json({ error: 'Not found' });
 
     res.status(204).send();
-  } catch (e) {
-    next(e);
-  }
+  } catch (e) { next(e); }
 });
 
 export default router;

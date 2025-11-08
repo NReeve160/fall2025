@@ -6,6 +6,8 @@ configurePassport();
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
+const tagOrder = ['Service health', 'Authorization', 'Campaigns', 'Adventurers'];
+
 import { readFileSync } from 'fs';
 configurePassport();
 
@@ -34,13 +36,41 @@ try {
 } catch {
   swaggerDoc = { openapi: '3.0.3', info: { title: 'Adventurers Guild API', version: '1.0.0' }, paths: {} };
 }
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+app.use(
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDoc, {
+    customSiteTitle: 'Adventurers Guild API Docs',
+    swaggerOptions: {
+      // Sort operations alphabetically to keep each tag tidy
+      operationsSorter: 'alpha',
+
+      // Force tag order without relying on an outer variable
+      tagsSorter: (a, b) => {
+        const order = ['Service health', 'Authorization', 'Campaigns', 'Adventurers'];
+        const ai = order.indexOf(a);
+        const bi = order.indexOf(b);
+        if (ai === -1 && bi === -1) return a.localeCompare(b); // any unexpected tags → alpha
+        if (ai === -1) return 1;  // unknown tags go last
+        if (bi === -1) return -1;
+        return ai - bi;
+      }
+    }
+  })
+);
+
 
 // 4) HEALTH
 // #swagger.tags = ['Health']
 // #swagger.summary = 'Liveness probe'
-app.get('/healthz', (_req, res) => res.json({ ok: true }));
-
+app.get('/healthz', (_req, res) => {
+  /* #swagger.tags = ['Service health']
+     #swagger.summary = 'Liveness probe'
+     #swagger.security = []  // public
+     #swagger.responses[200] = { description: 'OK' }
+  */
+  res.json({ ok: true });
+});
 
 // 5) ROUTES
 app.use('/auth', authRoutes);

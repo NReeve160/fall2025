@@ -1,171 +1,92 @@
+### Base URLs
+@local = http://localhost:8080
+@render = https://fall2025.onrender.com
+
 ###
-GET http://localhost:8080/healthz
+# Paste your JWT below after fetching it (or use the Google OAuth flow)
+@token = REPLACE_WITH_JWT
 
-#########################################
-# Adventurers Guild API — LOCAL WORKFLOW
-#########################################
-@localUrl = http://localhost:8080
-@localToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI1NTIxNDQsImV4cCI6MTc2MzE1Njk0NH0.dAQ6eEsI57I_GTdxHWJ-mFyjRHS3anbH5km_zMgysNM
+### HEALTH
+GET {{local}}/healthz
 
-### 0) Local Dev Login (get JWT)
-POST {{localUrl}}/auth/dev-login
+### AUTH - Who am I?
+GET {{local}}/auth/me
+Authorization: Bearer {{token}}
+
+### CAMPAIGNS - List (PUBLIC)
+GET {{render}}/campaigns/
+
+### CAMPAIGNS - Create (PROTECTED)
+POST {{render}}/campaigns/
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "email": "dm@example.com",
-  "id": "000000000000000000000010",
-  "role": "DM"
-}
-
-### 1) Create Campaign (LOCAL)
-POST {{localUrl}}/campaigns
-Authorization: Bearer {{localToken}}
-Content-Type: application/json
-
-{
-  "name": "Shattered Isles",
-  "description": "Floating islands campaign.",
-  "dm": "000000000000000000000010",
-  "players": [],
+  "name": "Lost Mines Wednesday",
+  "dm": "dm@example.com",
+  "description": "Bi-weekly session",
+  "players": ["p1@example.com"],
   "system": "D&D 5e",
   "status": "active"
 }
 
-### 2) List Campaigns (LOCAL)
-GET {{localUrl}}/campaigns
-Authorization: Bearer {{localToken}}
+### CAMPAIGNS - Get by id (PUBLIC)
+# Replace {{cid}} with an id returned from Create
+@cid = REPLACE_CAMPAIGN_ID
+GET {{render}}/campaigns/{{cid}}
 
-### 3) Create Adventurer (LOCAL)
-POST {{localUrl}}/adventurers
-Authorization: Bearer {{localToken}}
+### CAMPAIGNS - Update (PROTECTED)
+PUT {{render}}/campaigns/{{cid}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Dai Jing",
-  "race": "Halfling",
-  "class": "Monk",
-  "level": 5,
-  "alignment": "NG",
-  "background": "Country doctor",
-  "hitPoints": 38,
-  "strength": 10,
-  "dexterity": 18,
-  "constitution": 12,
-  "intelligence": 14,
-  "wisdom": 16,
-  "charisma": 12,
-  "owner": "000000000000000000000001",
+  "description": "Weekly session (updated)"
+}
+
+### CAMPAIGNS - Delete (PROTECTED)
+DELETE {{render}}/campaigns/{{cid}}
+Authorization: Bearer {{token}}
+
+### ADVENTURERS - List (PROTECTED)
+GET {{render}}/adventurers/
+Authorization: Bearer {{token}}
+
+### ADVENTURERS - Create (PROTECTED)
+POST {{render}}/adventurers/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Arannis",
+  "race": "Elf",
+  "class": "Ranger",
+  "level": 3,
+  "alignment": "CG",
+  "background": "Outlander",
+  "hitPoints": 24,
   "campaign": null
 }
 
-### 4) List Adventurers (LOCAL)
-GET {{localUrl}}/adventurers
-Authorization: Bearer {{localToken}}
+### ADVENTURERS - Get by id (PROTECTED)
+@aid = REPLACE_ADVENTURER_ID
+GET {{render}}/adventurers/{{aid}}
+Authorization: Bearer {{token}}
 
-### 5) Link Adventurer to Campaign (LOCAL)
-PUT {{localUrl}}/adventurers/690e6978d36f45274fc10328
-Authorization: Bearer {{localToken}}
+### ADVENTURERS - Update (PROTECTED)
+PUT {{render}}/adventurers/{{aid}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "campaign": "690e695dd36f45274fc10325"
+  "level": 4,
+  "hitPoints": 28
 }
 
-### 6) List Adventurers in Campaign (LOCAL)
-GET {{localUrl}}/adventurers?campaign=690e695dd36f45274fc10325
-Authorization: Bearer {{localToken}}
+### ADVENTURERS - Delete (PROTECTED)
+DELETE {{render}}/adventurers/{{aid}}
+Authorization: Bearer {{token}}
 
-### 7) Delete Adventurer (LOCAL)
-DELETE {{localUrl}}/adventurers/690e6978d36f45274fc10328
-Authorization: Bearer {{localToken}}
-
-### 8) Delete Campaign (LOCAL)
-DELETE {{localUrl}}/campaigns/690e695dd36f45274fc10325
-Authorization: Bearer {{localToken}}
-
-
-
-#########################################
-# Adventurers Guild API — RENDER WORKFLOW
-#########################################
-###
-GET https://fall2025.onrender.com/healthz
-
-@renderUrl = https://fall2025.onrender.com
-@renderToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMCIsImVtYWlsIjoiZG1AZXhhbXBsZS5jb20iLCJyb2xlIjoiRE0iLCJpYXQiOjE3NjI1NTIyNjksImV4cCI6MTc2MzE1NzA2OX0.n6q3Y5OPBidf11Dy8AbZz9b6E7XD08hsTYrnAk1ZGnc
-
-### 0) Render Dev Login (get JWT)
-POST {{renderUrl}}/auth/dev-login
-Content-Type: application/json
-
-{
-  "email": "dm@example.com",
-  "id": "000000000000000000000010",
-  "role": "DM"
-}
-
-### 1) Create Campaign (RENDER)
-POST {{renderUrl}}/campaigns
-Authorization: Bearer {{renderToken}}
-Content-Type: application/json
-
-{
-  "name": "Shattered Isles",
-  "description": "Floating islands campaign.",
-  "dm": "000000000000000000000010",
-  "players": [],
-  "system": "D&D 5e",
-  "status": "active"
-}
-
-### 2) List Campaigns (RENDER)
-GET {{renderUrl}}/campaigns
-Authorization: Bearer {{renderToken}}
-
-### 3) Create Adventurer (RENDER)
-POST {{renderUrl}}/adventurers
-Authorization: Bearer {{renderToken}}
-Content-Type: application/json
-
-{
-  "name": "Robin Hood",
-  "race": "Halfling",
-  "class": "Monk",
-  "level": 5,
-  "alignment": "NG",
-  "background": "Country doctor",
-  "hitPoints": 38,
-  "strength": 10,
-  "dexterity": 18,
-  "constitution": 12,
-  "intelligence": 14,
-  "wisdom": 16,
-  "charisma": 12,
-  "owner": "000000000000000000000001",
-  "campaign": null
-}
-
-### 4) List Adventurers (RENDER)
-GET {{renderUrl}}/adventurers
-Authorization: Bearer {{renderToken}}
-
-### 5) Link Adventurer to Campaign (RENDER)
-PUT {{renderUrl}}/adventurers/690e6a00204452276edd0452
-Authorization: Bearer {{renderToken}}
-Content-Type: application/json
-
-{
-  "campaign": "690e69e3204452276edd044f"
-}
-
-### 6) List Adventurers in Campaign (RENDER)
-GET {{renderUrl}}/adventurers?campaign=690e69e3204452276edd044f
-Authorization: Bearer {{renderToken}}
-
-### 7) Delete Adventurer (RENDER)
-DELETE {{renderUrl}}/adventurers/690e67a3204452276edd0440
-Authorization: Bearer {{renderToken}}
-
-### 8) Delete Campaign (RENDER)
-DELETE {{renderUrl}}/campaigns/690e69e3204452276edd044f
-Authorization: Bearer {{renderToken}}
+### CAMPAIGN → ADVENTURERS (PROTECTED)
+GET {{render}}/campaigns/{{cid}}/adventurers
+Authorization: Bearer {{token}}

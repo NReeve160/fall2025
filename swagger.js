@@ -13,10 +13,10 @@ const doc = {
     { url: 'http://localhost:8080' }
   ],
   tags: [
-    { name: 'Adventurers', description: 'Create, read, update, delete adventurers' },
+    { name: 'Service health', description: 'Liveness and readiness endpoints' },
+    { name: 'Authorization', description: 'Authentication flows and helpers (OAuth + JWT)' },
     { name: 'Campaigns', description: 'Manage campaigns and their members' },
-    { name: 'Auth', description: 'Authentication flows and helpers' },
-    { name: 'Health', description: 'Service health' }
+    { name: 'Adventurers', description: 'Create, read, update, and delete adventurers' }
   ],
   components: {
     securitySchemes: {
@@ -30,8 +30,13 @@ const doc = {
       Adventurer: {
         type: 'object',
         required: [
-          'name', 'race', 'class', 'level',
-          'alignment', 'background', 'hitPoints'
+          'name',
+          'race',
+          'class',
+          'level',
+          'alignment',
+          'background',
+          'hitPoints'
         ],
         properties: {
           name: { type: 'string', example: 'Arannis' },
@@ -51,9 +56,17 @@ const doc = {
           name: { type: 'string', example: 'Lost Mines Wednesday' },
           dm: { type: 'string', example: 'dm@example.com' },
           description: { type: 'string', example: 'Bi-weekly session' },
-          players: { type: 'array', items: { type: 'string' }, example: ['p1@example.com'] },
+          players: {
+            type: 'array',
+            items: { type: 'string' },
+            example: ['p1@example.com']
+          },
           system: { type: 'string', example: 'D&D 5e' },
-          status: { type: 'string', enum: ['active', 'paused', 'finished'], example: 'active' }
+          status: {
+            type: 'string',
+            enum: ['active', 'paused', 'finished'],
+            example: 'active'
+          }
         }
       },
       Error: {
@@ -65,12 +78,13 @@ const doc = {
       }
     }
   },
-  // Global security means all endpoints are protected by default;
-  // mark public ones with `#swagger.security = []` in the route.
+  // Global security; public routes should include `#swagger.security = []`
   security: [{ bearerAuth: [] }]
 };
 
 const outputFile = './swagger.json';
-const endpointsFiles = ['./index.js']; // your main entry (swagger-autogen will crawl your routers)
+// Only point to index.js so mounted route prefixes are detected
+const endpointsFiles = ['./index.js'];
 
-swaggerAutogen()(outputFile, endpointsFiles, doc);
+// Generate OpenAPI 3.0 definition
+swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc);
