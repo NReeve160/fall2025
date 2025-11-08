@@ -1,5 +1,3 @@
-// middleware/errorHandler.js
-
 // 404 handler
 export function notFound(_req, _res, next) {
   const err = new Error('Route not found');

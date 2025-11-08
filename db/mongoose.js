@@ -1,4 +1,3 @@
-// ESM + named export
 import mongoose from 'mongoose';
 
 export async function connectMongo() {

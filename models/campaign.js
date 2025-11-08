@@ -1,4 +1,3 @@
-// models/campaign.js
 import mongoose from 'mongoose';
 
 const campaignSchema = new mongoose.Schema(
