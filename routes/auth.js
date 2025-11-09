@@ -2,11 +2,48 @@
 import { Router } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import Adventurer from '../models/adventurer.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 
 const router = Router();
+const isId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-/* Ping (mounted check) */
+/* Promote an adventurer to DM (requires auth) */
+router.put('/adventurers/:id/role', requireAuth, async (req, res, next) => {
+  /* #swagger.tags = ['Authorization']
+     #swagger.summary = 'Promote adventurer to DM'
+     #swagger.description = "Sets the specified adventurer's role to DM so they can create campaigns."
+     #swagger.security = [{ bearerAuth: [] }]
+     #swagger.parameters['id'] = { in: 'path', required: true, schema: { type: 'string' } }
+     #swagger.responses[200] = {
+       description: 'Adventurer role updated',
+       content: { 'application/json': { schema: { type: 'object', properties: {
+         _id: { type: 'string' }, name: { type: 'string' }, role: { type: 'string' }
+       } } } }
+     }
+     #swagger.responses[400] = { description: 'Invalid id' }
+     #swagger.responses[401] = { description: 'Unauthorized' }
+     #swagger.responses[404] = { description: 'Not Found' }
+  */
+  try {
+    const { id } = req.params;
+    if (!isId(id)) return res.status(400).json({ error: 'Invalid id' });
+
+    const updated = await Adventurer.findByIdAndUpdate(
+      id,
+      { role: 'DM' },
+      { new: true, runValidators: true }
+    ).lean();
+
+    if (!updated) return res.status(404).json({ error: 'Not found' });
+    return res.json({ _id: updated._id, name: updated.name, role: updated.role });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/* Ping (router mounted check) */
 router.get('/ping', (_req, res) => {
   /* #swagger.tags = ['Authorization']
      #swagger.summary = 'Ping (router mounted check)'
@@ -19,7 +56,6 @@ router.get('/ping', (_req, res) => {
 /* Start Google OAuth (open in browser; not usable via Try it out) */
 router.get(
   '/google',
-  // Swagger note: this route redirects to Google; use a browser instead of Swagger
   (req, res, next) => {
     /* #swagger.tags = ['Authorization']
        #swagger.summary = 'Login with Google (browser redirect)'
@@ -35,16 +71,6 @@ router.get(
 /* Google OAuth callback → issue JWT (renders HTML with token) */
 router.get(
   '/google/callback',
-  (req, res, next) => {
-    /* #swagger.tags = ['Authorization']
-       #swagger.summary = 'Google callback (issues JWT)'
-       #swagger.description = 'Callback from Google. On success, returns an HTML page with a JWT to copy.'
-       #swagger.security = []  // public (Google posts back)
-       #swagger.responses[200] = { description: 'HTML page with JWT' }
-       #swagger.responses[401] = { description: 'Login failed' }
-    */
-    next();
-  },
   passport.authenticate('google', { session: false, failureRedirect: '/auth/failure' }),
   (req, res) => {
     const token = jwt.sign(
@@ -105,8 +131,8 @@ router.get('/dev-token', (req, res) => {
 router.get('/me', requireAuth, (req, res) => {
   /* #swagger.tags = ['Authorization']
      #swagger.summary = 'Who am I? (requires Bearer JWT)'
-     #swagger.responses[200] = { description: 'User payload', content: { 'application/json': { schema: { type: 'object' } } } }
      #swagger.security = [{ bearerAuth: [] }]
+     #swagger.responses[200] = { description: 'User payload' }
   */
   res.json({ user: req.user });
 });
